@@ -69,14 +69,12 @@ public class EditClassView {
                             getEnumIndex(fieldInfo.getFieldType(),
                             (Enum)fieldInfo.getField().get(entity))
                     );
-                else if (Entity.class.isAssignableFrom(fieldInfo.getFieldType()))
+                else if (Entity.class.isAssignableFrom(fieldInfo.getFieldType())) {
+                    Entity aggregatedEntity = (Entity) fieldInfo.getField().get(entity);
                     ((ChoiceBox) inputs.get(fieldIndex)).getSelectionModel().select(
-                            getSelectedClassIndex(
-                            fieldInfo.getFieldType(),
-                            (Entity)fieldInfo.getField().get(entity),
-                            entities
-                            )
-                    );
+                            getSelectedClassIndex(fieldInfo.getFieldType(), aggregatedEntity, entities));
+
+                }
 
             } catch (Exception e) {
             }

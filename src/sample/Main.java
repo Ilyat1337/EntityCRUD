@@ -15,18 +15,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-//        this.primaryStage = primaryStage;
-//        FXMLLoader loader = new FXMLLoader();
-//        loader.setLocation(getClass().getResource("view/EditClass.fxml"));
-//        Parent root = loader.load();
-//
-//        ((EditClassController) loader.getController()).setStage(primaryStage);
-//
-//        primaryStage.setResizable(false);
-//        primaryStage.setTitle(windowTitle);
-//        primaryStage.setScene(new Scene(root));
-//        primaryStage.show();
-
         this.primaryStage = primaryStage;
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("view/ClassTable.fxml"));

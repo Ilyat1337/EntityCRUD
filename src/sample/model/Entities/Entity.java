@@ -1,9 +1,6 @@
 package sample.model.Entities;
 
 public abstract class Entity {
-    Entity() {
-        System.out.println("Hi!");
-    }
 
     @EntityAnnotation(name = "ID")
     public int id;
@@ -13,6 +10,22 @@ public abstract class Entity {
 
     @EntityAnnotation(name = "Texture file")
     public String textureFile;
+
+    private int aggregationsCount = 0;
+
+    public boolean isAggregated() {
+        return aggregationsCount != 0;
+    }
+
+    public void incrementAggregations() {
+        aggregationsCount++;
+        System.out.println(aggregationsCount);
+    }
+
+    public void decrementAggregations() {
+        aggregationsCount--;
+        System.out.println(aggregationsCount);
+    }
 
     @Override
     public String toString() {

@@ -14,8 +14,8 @@ public class EditClassModel {
     private final String ERROR_MESSAGE = "Неверное значение типа %s в поле %s.";
 
     private ClassHandler classHandler;
-
     private Entity createdEntity;
+    private int selectedClassIndex;
 
     public EditClassModel(ArrayList<Entity> entities) {
         this.entities = entities;
@@ -37,8 +37,6 @@ public class EditClassModel {
         setSelectedClassIndex(getIndexForClass(entity.getClass()));
     }
 
-    private int selectedClassIndex;
-
     public void setSelectedClassIndex(int classIndex) {
         selectedClassIndex = classIndex;
     }
@@ -59,7 +57,7 @@ public class EditClassModel {
         return classHandler.getFieldsInfoForClass(selectedClassIndex);
     }
 
-    int getIndexForClass(Class givenClass) {
+    private int getIndexForClass(Class givenClass) {
         return classHandler.getClassList().indexOf(givenClass);
     }
 
@@ -124,13 +122,21 @@ public class EditClassModel {
                             fieldInfo.getField().getType().getEnumConstants()[
                             ((ChoiceBox) inputControls.get(currFieldIndex)).getSelectionModel().getSelectedIndex()
                     ]);
-                else if (Entity.class.isAssignableFrom(fieldInfo.getFieldType()))
-                    fieldInfo.getField().set(createdEntity, getSelectedClass(
-                                fieldInfo.getFieldType(),
-                                ((ChoiceBox) inputControls.get(currFieldIndex)).getSelectionModel().getSelectedIndex(),
-                                entities
-                                )
+                else if (Entity.class.isAssignableFrom(fieldInfo.getFieldType())) {
+                    Entity selectedEntity = getSelectedClass(
+                            fieldInfo.getFieldType(),
+                            ((ChoiceBox) inputControls.get(currFieldIndex)).getSelectionModel().getSelectedIndex(),
+                            entities
                     );
+                    Entity setEntity = (Entity)fieldInfo.getField().get(createdEntity);
+                    if (setEntity != selectedEntity) {
+                        if (setEntity != null)
+                            setEntity.decrementAggregations();
+                        if (selectedEntity != null)
+                            selectedEntity.incrementAggregations();
+                    }
+                    fieldInfo.getField().set(createdEntity, selectedEntity);
+                }
             } catch (Exception e) {
             }
             currFieldIndex++;

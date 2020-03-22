@@ -13,26 +13,12 @@ import sample.view.EditClassView;
 import java.util.ArrayList;
 
 public class EditClassController {
-
-    public EditClassController(ArrayList<Entity> entities) {
-       model  = new EditClassModel(entities);
-       view = new EditClassView();
-    }
-
     private EditClassModel model;
     private EditClassView view;
 
     private boolean saveClicked;
 
-    public boolean isSaveClicked() {
-        return saveClicked;
-    }
-
     private Stage stage;
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
 
     @FXML
     private ChoiceBox<String> cbClasses;
@@ -44,6 +30,19 @@ public class EditClassController {
     private Button btSave;
 
     private ArrayList<Control> inputControls;
+
+    public EditClassController(ArrayList<Entity> entities) {
+        model  = new EditClassModel(entities);
+        view = new EditClassView();
+    }
+
+    public boolean isSaveClicked() {
+        return saveClicked;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
 
     public Entity getCreatedEntityInfo() {
         return model.getCreatedEntity();
@@ -61,7 +60,6 @@ public class EditClassController {
     @FXML
     private void btSavePressed() {
         if (model.isValidInput(inputControls)) {
-            System.out.println("Valid!");
             model.createEntity(inputControls);
             saveClicked = true;
             stage.close();
@@ -74,7 +72,6 @@ public class EditClassController {
     }
 
     private void onChoiceBoxIndexChanged(int selectedIndex) {
-        System.out.println(selectedIndex);
         model.setSelectedClassIndex(selectedIndex);
         drawInputsForClass();
     }
@@ -85,6 +82,7 @@ public class EditClassController {
         drawInputsForClass();
         view.fillInputsForObject(entity, model.getFieldsInfoForClass(), inputControls, model.getEntities());
 
+        cbClasses.setDisable(true);
         btSave.setText("Сохранить");
     }
 

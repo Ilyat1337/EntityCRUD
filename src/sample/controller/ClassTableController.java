@@ -20,13 +20,9 @@ import sample.view.ClassInfo;
 
 public class ClassTableController {
 
-    ClassTableModel model = new ClassTableModel();
+    private ClassTableModel model = new ClassTableModel();
 
     private Stage stage;
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
 
     @FXML
     private TableView<ClassInfo> tvClasses;
@@ -47,6 +43,10 @@ public class ClassTableController {
     private Button btAdd;
 
     private ObservableList<ClassInfo> classInfoList = FXCollections.observableArrayList();
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
 
     @FXML
     private void initialize() {
@@ -86,8 +86,8 @@ public class ClassTableController {
     private void btDeletePressed() {
         int selectedIndex;
         if ((selectedIndex = tvClasses.getSelectionModel().getSelectedIndex()) >= 0) {
+            model.handleDeleteClass(selectedIndex);
             classInfoList.remove(selectedIndex);
-            model.getEntities().remove(selectedIndex);
         }
     }
 
