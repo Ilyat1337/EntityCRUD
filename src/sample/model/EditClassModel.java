@@ -17,9 +17,9 @@ public class EditClassModel {
     private Entity createdEntity;
     private int selectedClassIndex;
 
-    public EditClassModel(ArrayList<Entity> entities) {
+    public EditClassModel(ArrayList<Entity> entities, Entity entityForEdit) {
         this.entities = entities;
-        classHandler = new ClassHandler(entities);
+        classHandler = new ClassHandler(entities, entityForEdit);
     }
 
     public Entity getCreatedEntity() {
@@ -126,7 +126,8 @@ public class EditClassModel {
                     Entity selectedEntity = getSelectedClass(
                             fieldInfo.getFieldType(),
                             ((ChoiceBox) inputControls.get(currFieldIndex)).getSelectionModel().getSelectedIndex(),
-                            entities
+                            entities,
+                            createdEntity
                     );
                     Entity setEntity = (Entity)fieldInfo.getField().get(createdEntity);
                     if (setEntity != selectedEntity) {
@@ -143,12 +144,12 @@ public class EditClassModel {
         }
     }
 
-    Entity getSelectedClass(Class fieldClass, int selectedIndex, ArrayList<Entity> entities) {
+    Entity getSelectedClass(Class fieldClass, int selectedIndex, ArrayList<Entity> entities, Entity createdEntity) {
         if (selectedIndex == 0)
             return null;
         int suitableClassCount = 0;
         for (Entity entity : entities) {
-            if(fieldClass.isAssignableFrom(entity.getClass()))
+            if(fieldClass.isAssignableFrom(entity.getClass()) && entity != createdEntity)
             {
                 suitableClassCount++;
                 if (suitableClassCount == selectedIndex)

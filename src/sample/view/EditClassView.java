@@ -72,7 +72,7 @@ public class EditClassView {
                 else if (Entity.class.isAssignableFrom(fieldInfo.getFieldType())) {
                     Entity aggregatedEntity = (Entity) fieldInfo.getField().get(entity);
                     ((ChoiceBox) inputs.get(fieldIndex)).getSelectionModel().select(
-                            getSelectedClassIndex(fieldInfo.getFieldType(), aggregatedEntity, entities));
+                            getSelectedClassIndex(fieldInfo.getFieldType(), aggregatedEntity, entities, entity));
 
                 }
 
@@ -91,12 +91,12 @@ public class EditClassView {
         return 0;
     }
 
-    private int getSelectedClassIndex(Class fieldClass, Entity entity, ArrayList<Entity> entities) {
+    private int getSelectedClassIndex(Class fieldClass, Entity entity, ArrayList<Entity> entities, Entity givenEntity) {
         if (entity == null)
             return 0;
         int suitableClassCount = 0;
         for (Entity entityIter : entities) {
-            if(fieldClass.isAssignableFrom(entityIter.getClass()))
+            if(fieldClass.isAssignableFrom(entityIter.getClass()) && entityIter != givenEntity)
             {
                 suitableClassCount++;
                 if (entity == entityIter)

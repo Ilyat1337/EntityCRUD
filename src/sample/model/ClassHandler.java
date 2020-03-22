@@ -22,12 +22,12 @@ public class ClassHandler {
     private ArrayList<String> classNames;
     private ArrayList<ArrayList<FieldInfo>> fieldsInfoList;
 
-    public ClassHandler(ArrayList<Entity> entities) {
+    public ClassHandler(ArrayList<Entity> entities, Entity entityForEdit) {
         classList = new ArrayList<>();
         classNames = new ArrayList<>();
         fieldsInfoList = new ArrayList<>();
         getSubClassesForPackage(PACKAGE_NAME, Entity.class);
-        createFieldsInfo(entities);
+        createFieldsInfo(entities, entityForEdit);
     }
 
     public ArrayList<Class> getClassList() {
@@ -82,7 +82,7 @@ public class ClassHandler {
         }
     }
 
-    private void createFieldsInfo(ArrayList<Entity> entities) {
+    private void createFieldsInfo(ArrayList<Entity> entities, Entity entityForEdit) {
         for (Class classIter : classList) {
             ArrayList<FieldInfo> fieldsInfo = new ArrayList<>();
             Field[] fields = classIter.getFields();
@@ -93,7 +93,7 @@ public class ClassHandler {
                 else if (field.getType().isEnum())
                     fieldsInfo.add(getFieldsInfoForEnum(field));
                 else if (Entity.class.isAssignableFrom(field.getType()))
-                    fieldsInfo.add(getFieldsInfoForEntity(field, entities));
+                    fieldsInfo.add(getFieldsInfoForEntity(field, entities, entityForEdit));
             }
             fieldsInfoList.add(fieldsInfo);
         }
@@ -112,11 +112,11 @@ public class ClassHandler {
         return new FieldInfo(enumField, enumField.getType(), getAnnotatedName(enumField), fieldNames);
     }
 
-    private FieldInfo getFieldsInfoForEntity(Field classField, ArrayList<Entity> entities) {
+    private FieldInfo getFieldsInfoForEntity(Field classField, ArrayList<Entity> entities, Entity entityForEdit) {
         ArrayList<String> fieldNames = new ArrayList<>();
         fieldNames.add(NULL_NAME);
         for (Entity entity : entities) {
-            if (classField.getType().isAssignableFrom(entity.getClass()))
+            if (classField.getType().isAssignableFrom(entity.getClass()) && entity != entityForEdit)
                 fieldNames.add(entity.getEntityName() + " [" + entity.toString() + "]");
         }
         return new FieldInfo(classField, classField.getType(), getAnnotatedName(classField), fieldNames);

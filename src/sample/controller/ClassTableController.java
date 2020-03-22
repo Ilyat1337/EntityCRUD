@@ -1,16 +1,20 @@
 package sample.controller;
 
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import sample.Main;
 import sample.model.ClassTableModel;
 import sample.model.Entities.Entity;
@@ -53,19 +57,12 @@ public class ClassTableController {
         tcNumber.setCellValueFactory(cellData -> cellData.getValue().classNumberProperty());
         tcName.setCellValueFactory(cellData -> cellData.getValue().classNameProperty());
         tvClasses.setItems(classInfoList);
-//        classInfoList.add(new ClassInfo("123", "Creeper"));
-//        classInfoList.add(new ClassInfo("345", "Steve"));
-//        classInfoList.add(new ClassInfo("678", "Pickaxe"));
+        addContextMenu();
     }
 
 
     @FXML
     private void btAddPressed() {
-//        EntitySword entitySword = new EntitySword();
-//        entitySword.cooldownTime = 10;
-//        entitySword.id = 18;
-//        entitySword.materialType = EntityTool.toolMaterialType.IRON;
-//        entitySword.textureFile = "sword.png";
         Entity createdEntity = openEditClassForm(null);
         if (createdEntity != null) {
             model.addEntity(createdEntity);
@@ -93,7 +90,7 @@ public class ClassTableController {
 
     private Entity openEditClassForm(Entity entityForEdit) {
         try {
-            EditClassController controller = new EditClassController(model.getEntities());
+            EditClassController controller = new EditClassController(model.getEntities(), entityForEdit);
 
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("view/EditClass.fxml"));
@@ -104,14 +101,13 @@ public class ClassTableController {
             editStage.setTitle(Main.WINDOW_TITLE);
             editStage.initModality(Modality.WINDOW_MODAL);
             editStage.initOwner(stage);
+            editStage.setResizable(false);
             Scene scene = new Scene(page);
             editStage.setScene(scene);
-
             controller.setStage(editStage);
-            if (entityForEdit != null) {
-                controller.setEntity(entityForEdit);
-            }
 
+            if (entityForEdit != null)
+                controller.setEntity(entityForEdit);
             editStage.showAndWait();
 
             if (controller.isSaveClicked())
@@ -121,6 +117,29 @@ public class ClassTableController {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    private void addContextMenu() {
+        ContextMenu cmChange = new ContextMenu();
+        MenuItem miEdit = new MenuItem("Изменить");
+        miEdit.setOnAction(click -> btEditPressed());
+        cmChange.getItems().add(miEdit);
+        MenuItem miDelete = new MenuItem("Удалить");
+        miDelete.setOnAction(click -> btDeletePressed());
+        cmChange.getItems().add(miDelete);
+
+        tvClasses.setRowFactory(new Callback<TableView<ClassInfo>, TableRow<ClassInfo>>() {
+            @Override
+            public TableRow<ClassInfo> call(TableView<ClassInfo> tableView) {
+                final TableRow<ClassInfo> row = new TableRow<>();
+                row.contextMenuProperty().bind(
+                        Bindings.when(row.emptyProperty())
+                                .then((ContextMenu)null)
+                                .otherwise(cmChange)
+                );
+                return row;
+            }
+        });
     }
 
 }

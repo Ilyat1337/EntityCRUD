@@ -31,8 +31,8 @@ public class EditClassController {
 
     private ArrayList<Control> inputControls;
 
-    public EditClassController(ArrayList<Entity> entities) {
-        model  = new EditClassModel(entities);
+    public EditClassController(ArrayList<Entity> entities, Entity entityForEdit) {
+        model  = new EditClassModel(entities, entityForEdit);
         view = new EditClassView();
     }
 

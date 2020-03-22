@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="469.0" prefWidth="338.0" style="-fx-font-size: 14px; -fx-font-family: Times New Roman;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="527.0" prefWidth="338.0" style="-fx-font-size: 14px; -fx-font-family: Times New Roman;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label layoutX="80.0" layoutY="29.0" text="Редактирование класса">
          <font>
@@ -27,7 +27,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" />
          </rowConstraints>
       </GridPane>
-      <Pane layoutX="48.0" layoutY="414.0" prefHeight="30.0" prefWidth="242.0">
+      <Pane layoutX="48.0" layoutY="483.0" prefHeight="30.0" prefWidth="242.0">
          <children>
             <Button fx:id="btCancel" mnemonicParsing="false" onAction="#btCancelPressed" prefHeight="30.0" prefWidth="82.0" text="Отмена" />
             <Button fx:id="btSave" layoutX="160.0" layoutY="1.0" mnemonicParsing="false" onAction="#btSavePressed" text="Добавить" />
