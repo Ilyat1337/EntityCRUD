@@ -19,12 +19,10 @@ public abstract class Entity {
 
     public void incrementAggregations() {
         aggregationsCount++;
-        System.out.println(aggregationsCount);
     }
 
     public void decrementAggregations() {
         aggregationsCount--;
-        System.out.println(aggregationsCount);
     }
 
     @Override
