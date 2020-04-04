@@ -9,12 +9,14 @@ public class FieldInfo {
     private Class fieldType;
     private String fieldName;
     private ArrayList<String> fieldValues;
+    private ArrayList<Object> fieldObjects;
 
-    public FieldInfo(Field field, Class fieldType, String fieldName, ArrayList<String> fieldValues) {
+    public FieldInfo(Field field, Class fieldType, String fieldName, ArrayList<String> fieldValues, ArrayList<Object> fieldObjects) {
         this.field = field;
         this.fieldType = fieldType;
         this.fieldName = fieldName;
         this.fieldValues = fieldValues;
+        this.fieldObjects = fieldObjects;
 
 //        System.out.println(fieldType.getName());
 //        System.out.println(fieldName);
@@ -37,5 +39,9 @@ public class FieldInfo {
 
     public ArrayList<String> getFieldValues() {
         return fieldValues;
+    }
+
+    public ArrayList<Object> getFieldObjects() {
+        return fieldObjects;
     }
 }

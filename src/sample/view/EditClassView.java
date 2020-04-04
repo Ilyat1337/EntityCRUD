@@ -53,15 +53,13 @@ public class EditClassView {
         return checkBox;
     }
 
-    public void fillInputsForObject(Entity entity, ArrayList<FieldInfo> fieldsInfo, ArrayList<Control> inputs,
-                                    ArrayList<Entity> entities) {
+    public void fillInputsForObject(Entity entity, ArrayList<FieldInfo> fieldsInfo, ArrayList<Control> inputs) {
         int fieldIndex = 0;
         for (FieldInfo fieldInfo : fieldsInfo) {
             try {
-                if (fieldInfo.getFieldType().equals(int.class) || fieldInfo.getFieldType().equals(double.class))
+                if (fieldInfo.getFieldType().equals(int.class) || fieldInfo.getFieldType().equals(double.class)
+                    || fieldInfo.getFieldType().equals(String.class))
                     ((TextField) inputs.get(fieldIndex)).setText(String.valueOf(fieldInfo.getField().get(entity)));
-                else if (fieldInfo.getFieldType().equals(String.class))
-                    ((TextField) inputs.get(fieldIndex)).setText((String)fieldInfo.getField().get(entity));
                 else if (fieldInfo.getFieldType().equals(boolean.class))
                     ((CheckBox) inputs.get(fieldIndex)).setSelected((boolean)fieldInfo.getField().get(entity));
                 else if (fieldInfo.getFieldType().isEnum())
@@ -72,7 +70,7 @@ public class EditClassView {
                 else if (Entity.class.isAssignableFrom(fieldInfo.getFieldType())) {
                     Entity aggregatedEntity = (Entity) fieldInfo.getField().get(entity);
                     ((ChoiceBox) inputs.get(fieldIndex)).getSelectionModel().select(
-                            getSelectedClassIndex(fieldInfo.getFieldType(), aggregatedEntity, entities, entity));
+                            getSelectedClassIndex(fieldInfo.getFieldObjects(), aggregatedEntity));
 
                 }
 
@@ -91,18 +89,10 @@ public class EditClassView {
         return 0;
     }
 
-    private int getSelectedClassIndex(Class fieldClass, Entity entity, ArrayList<Entity> entities, Entity givenEntity) {
+    private int getSelectedClassIndex(ArrayList<Object> fieldObjects, Entity entity) {
         if (entity == null)
             return 0;
-        int suitableClassCount = 0;
-        for (Entity entityIter : entities) {
-            if(fieldClass.isAssignableFrom(entityIter.getClass()) && entityIter != givenEntity)
-            {
-                suitableClassCount++;
-                if (entity == entityIter)
-                    return suitableClassCount;
-            }
-        }
-        return 0;
+        int entityIndex;
+        return (entityIndex = fieldObjects.indexOf(entity)) != -1 ? entityIndex + 1 : 0;
     }
 }

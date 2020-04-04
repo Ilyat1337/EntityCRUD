@@ -80,7 +80,7 @@ public class EditClassController {
         model.setCreatedEntity(entity);
         cbClasses.getSelectionModel().select(model.getSelectedClassIndex());
         drawInputsForClass();
-        view.fillInputsForObject(entity, model.getFieldsInfoForClass(), inputControls, model.getEntities());
+        view.fillInputsForObject(entity, model.getFieldsInfoForClass(), inputControls);
 
         cbClasses.setDisable(true);
         btSave.setText("Сохранить");

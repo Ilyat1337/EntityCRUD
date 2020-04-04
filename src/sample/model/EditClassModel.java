@@ -124,10 +124,8 @@ public class EditClassModel {
                     ]);
                 else if (Entity.class.isAssignableFrom(fieldInfo.getFieldType())) {
                     Entity selectedEntity = getSelectedClass(
-                            fieldInfo.getFieldType(),
-                            ((ChoiceBox) inputControls.get(currFieldIndex)).getSelectionModel().getSelectedIndex(),
-                            entities,
-                            createdEntity
+                            fieldInfo.getFieldObjects(),
+                            ((ChoiceBox) inputControls.get(currFieldIndex)).getSelectionModel().getSelectedIndex()
                     );
                     Entity setEntity = (Entity)fieldInfo.getField().get(createdEntity);
                     if (setEntity != selectedEntity) {
@@ -144,19 +142,10 @@ public class EditClassModel {
         }
     }
 
-    Entity getSelectedClass(Class fieldClass, int selectedIndex, ArrayList<Entity> entities, Entity createdEntity) {
+    Entity getSelectedClass(ArrayList<Object> fieldObjects, int selectedIndex) {
         if (selectedIndex == 0)
             return null;
-        int suitableClassCount = 0;
-        for (Entity entity : entities) {
-            if(fieldClass.isAssignableFrom(entity.getClass()) && entity != createdEntity)
-            {
-                suitableClassCount++;
-                if (suitableClassCount == selectedIndex)
-                    return entity;
-            }
-        }
-        return null;
+        return (Entity)fieldObjects.get(selectedIndex - 1);
     }
 
 }

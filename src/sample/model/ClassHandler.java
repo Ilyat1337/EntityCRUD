@@ -100,7 +100,7 @@ public class ClassHandler {
     }
 
     private FieldInfo getFieldInfoForSimpleClass(Field simpleField) {
-        return new FieldInfo(simpleField, simpleField.getType(), getAnnotatedName(simpleField), null);
+        return new FieldInfo(simpleField, simpleField.getType(), getAnnotatedName(simpleField), null, null);
     }
 
     private FieldInfo getFieldsInfoForEnum(Field enumField) {
@@ -109,17 +109,20 @@ public class ClassHandler {
         for (Field enumValue : enumValues) {
             fieldNames.add(getAnnotatedName(enumValue));
         }
-        return new FieldInfo(enumField, enumField.getType(), getAnnotatedName(enumField), fieldNames);
+        return new FieldInfo(enumField, enumField.getType(), getAnnotatedName(enumField), fieldNames, null);
     }
 
     private FieldInfo getFieldsInfoForEntity(Field classField, ArrayList<Entity> entities, Entity entityForEdit) {
         ArrayList<String> fieldNames = new ArrayList<>();
+        ArrayList<Object> fieldObjects = new ArrayList<>();
         fieldNames.add(NULL_NAME);
         for (Entity entity : entities) {
-            if (classField.getType().isAssignableFrom(entity.getClass()) && entity != entityForEdit)
+            if (classField.getType().isAssignableFrom(entity.getClass()) && entity != entityForEdit) {
                 fieldNames.add(entity.getEntityName() + " [" + entity.toString() + "]");
+                fieldObjects.add(entity);
+            }
         }
-        return new FieldInfo(classField, classField.getType(), getAnnotatedName(classField), fieldNames);
+        return new FieldInfo(classField, classField.getType(), getAnnotatedName(classField), fieldNames, fieldObjects);
     }
 
     private String getAnnotatedName(Field field) {
