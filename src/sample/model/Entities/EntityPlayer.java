@@ -10,6 +10,7 @@ public class EntityPlayer extends EntityLiving {
     @EntityAnnotation(name = "Tool")
     public EntityTool tool;
 
+    @Override
     public String getEntityName() {
         return super.getEntityName() + " (" + username + ")";
     }

@@ -41,7 +41,15 @@ public class FieldInfo {
         return fieldValues;
     }
 
+    public void setFieldValues(ArrayList<String> fieldValues) {
+        this.fieldValues = fieldValues;
+    }
+
     public ArrayList<Object> getFieldObjects() {
         return fieldObjects;
+    }
+
+    public void setFieldObjects(ArrayList<Object> fieldObjects) {
+        this.fieldObjects = fieldObjects;
     }
 }

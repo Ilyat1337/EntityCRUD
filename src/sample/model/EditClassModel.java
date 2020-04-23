@@ -13,13 +13,14 @@ public class EditClassModel {
 
     private final String ERROR_MESSAGE = "Неверное значение типа %s в поле %s.";
 
-    private ClassHandler classHandler;
+    //private ClassHandler classHandler;
     private Entity createdEntity;
     private int selectedClassIndex;
 
     public EditClassModel(ArrayList<Entity> entities, Entity entityForEdit) {
         this.entities = entities;
-        classHandler = new ClassHandler(entities, entityForEdit);
+        //classHandler = new ClassHandler(entities, entityForEdit);
+        ClassHandler.fillFieldInfoForEntities(entities, entityForEdit);
     }
 
     public Entity getCreatedEntity() {
@@ -46,19 +47,19 @@ public class EditClassModel {
     }
 
     public ArrayList<Class> getClassList() {
-        return classHandler.getClassList();
+        return ClassHandler.getClassList();
     }
 
     public ArrayList<String> getClassNames() {
-        return classHandler.getClassNames();
+        return ClassHandler.getClassNames();
     }
 
     public ArrayList<FieldInfo> getFieldsInfoForClass() {
-        return classHandler.getFieldsInfoForClass(selectedClassIndex);
+        return ClassHandler.getFieldsInfoForClass(selectedClassIndex);
     }
 
     private int getIndexForClass(Class givenClass) {
-        return classHandler.getClassList().indexOf(givenClass);
+        return ClassHandler.getClassList().indexOf(givenClass);
     }
 
     public boolean isValidInput(ArrayList<Control> inputControls) {

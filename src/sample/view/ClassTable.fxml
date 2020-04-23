@@ -2,32 +2,64 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
 
-<AnchorPane prefHeight="333.0" prefWidth="389.0" style="-fx-font-family: Times New Roman; -fx-font-size: 13;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.ClassTableController">
-   <children>
-      <TableView fx:id="tvClasses" layoutX="25.0" layoutY="52.0" prefHeight="227.0" prefWidth="340.0">
-        <columns>
-          <TableColumn fx:id="tcNumber" editable="false" prefWidth="111.0" resizable="false" sortable="false" text="Номер" />
-          <TableColumn fx:id="tcName" editable="false" prefWidth="227.0" resizable="false" sortable="false" text="Название" />
-        </columns>
-      </TableView>
-      <Label layoutX="155.0" layoutY="21.0" text="Сущности">
-         <font>
-            <Font name="Times New Roman" size="18.0" />
-         </font>
-      </Label>
-      <HBox layoutX="66.0" layoutY="290.0" spacing="20.0">
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.ClassTableController">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="Файл">
+            <items>
+              <MenuItem fx:id="btOpen" mnemonicParsing="false" text="Открыть...">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator>
+                  </MenuItem>
+                  <MenuItem id="btSaveAs" fx:id="btSaveAs" mnemonicParsing="false" text="Сохранить как...">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                     </accelerator>
+                  </MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem mnemonicParsing="false" onAction="#btExitPressed" text="Выход" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <bottom>
+      <AnchorPane prefHeight="333.0" prefWidth="389.0" style="-fx-font-family: Times New Roman; -fx-font-size: 13;" BorderPane.alignment="CENTER">
          <children>
-          <Button fx:id="btDelete" mnemonicParsing="false" onAction="#btDeletePressed" text="Удалить" />
-            <Button fx:id="btChange" mnemonicParsing="false" onAction="#btEditPressed" text="Изменить" />
-            <Button fx:id="btAdd" mnemonicParsing="false" onAction="#btAddPressed" text="Добавить" />
+            <TableView fx:id="tvClasses" layoutX="25.0" layoutY="52.0" prefHeight="227.0" prefWidth="340.0">
+              <columns>
+                <TableColumn fx:id="tcNumber" editable="false" prefWidth="111.0" resizable="false" sortable="false" text="Номер" />
+                <TableColumn fx:id="tcName" editable="false" prefWidth="227.0" resizable="false" sortable="false" text="Название" />
+              </columns>
+            </TableView>
+            <Label layoutX="155.0" layoutY="21.0" text="Сущности">
+               <font>
+                  <Font name="Times New Roman" size="18.0" />
+               </font>
+            </Label>
+            <HBox layoutX="66.0" layoutY="290.0" spacing="20.0">
+               <children>
+                <Button fx:id="btDelete" mnemonicParsing="false" onAction="#btDeletePressed" text="Удалить" />
+                  <Button fx:id="btChange" mnemonicParsing="false" onAction="#btEditPressed" text="Изменить" />
+                  <Button fx:id="btAdd" mnemonicParsing="false" onAction="#btAddPressed" text="Добавить" />
+               </children>
+            </HBox>
          </children>
-      </HBox>
-   </children>
-</AnchorPane>
+      </AnchorPane>
+   </bottom>
+</BorderPane>

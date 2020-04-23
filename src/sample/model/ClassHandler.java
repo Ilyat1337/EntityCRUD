@@ -16,33 +16,59 @@ import java.util.HashSet;
 
 public class ClassHandler {
 
-    private final String PACKAGE_NAME = "sample.model.Entities";
-    private final String NULL_NAME = "null";
-    private ArrayList<Class> classList;
-    private ArrayList<String> classNames;
-    private ArrayList<ArrayList<FieldInfo>> fieldsInfoList;
+    private static final String PACKAGE_NAME = "sample.model.Entities";
+    public static final String NULL_NAME = "null";
+    private static ArrayList<Class> classList;
+    private static ArrayList<String> classNames;
+    private static ArrayList<ArrayList<FieldInfo>> fieldsInfoList;
 
-    public ClassHandler(ArrayList<Entity> entities, Entity entityForEdit) {
+//    public ClassHandler(ArrayList<Entity> entities, Entity entityForEdit) {
+//        classList = new ArrayList<>();
+//        classNames = new ArrayList<>();
+//        fieldsInfoList = new ArrayList<>();
+//        getSubClassesForPackage(PACKAGE_NAME, Entity.class);
+//        createFieldsInfo(entities, entityForEdit);
+//    }
+
+    public static void initialize() {
         classList = new ArrayList<>();
         classNames = new ArrayList<>();
         fieldsInfoList = new ArrayList<>();
         getSubClassesForPackage(PACKAGE_NAME, Entity.class);
-        createFieldsInfo(entities, entityForEdit);
+        createFieldsInfo();
     }
 
-    public ArrayList<Class> getClassList() {
+    public static ArrayList<Class> getClassList() {
         return classList;
     }
 
-    public ArrayList<String> getClassNames() {
+    public static ArrayList<String> getClassNames() {
         return classNames;
     }
 
-    public ArrayList<FieldInfo> getFieldsInfoForClass(int classIndex) {
+    public static ArrayList<FieldInfo> getFieldsInfoForClass(int classIndex) {
         return fieldsInfoList.get(classIndex);
     }
 
-    private void getSubClassesForPackage(String packageName, Class superClass) {
+    public static Class getClassByName(String className) {
+        for (int i = 0; i < classNames.size(); i++) {
+            if (classNames.get(i).equals(className)) {
+                return classList.get(i);
+            }
+        }
+        return null;
+    }
+
+    public static ArrayList<FieldInfo> getFieldsInfoForClass(Class givenClass) {
+        for (int i = 0; i < classList.size(); i++) {
+            if (classList.get(i).equals(givenClass)) {
+                return getFieldsInfoForClass(i);
+            }
+        }
+        return null;
+    }
+
+    private static void getSubClassesForPackage(String packageName, Class superClass) {
         try {
             ArrayList<Class> classes = new ArrayList<>();
             ClassLoader classLoader = Main.class.getClassLoader();
@@ -79,10 +105,11 @@ public class ClassHandler {
             alert.setTitle("Ошибка");
             alert.setHeaderText("Ошибка");
             alert.setContentText("Ошибка во время загрузки классов из файла!");
+            alert.showAndWait();
         }
     }
 
-    private void createFieldsInfo(ArrayList<Entity> entities, Entity entityForEdit) {
+    private static void createFieldsInfo() {
         for (Class classIter : classList) {
             ArrayList<FieldInfo> fieldsInfo = new ArrayList<>();
             Field[] fields = classIter.getFields();
@@ -93,17 +120,17 @@ public class ClassHandler {
                 else if (field.getType().isEnum())
                     fieldsInfo.add(getFieldsInfoForEnum(field));
                 else if (Entity.class.isAssignableFrom(field.getType()))
-                    fieldsInfo.add(getFieldsInfoForEntity(field, entities, entityForEdit));
+                    fieldsInfo.add(getFieldInfoForSimpleClass(field));
             }
             fieldsInfoList.add(fieldsInfo);
         }
     }
 
-    private FieldInfo getFieldInfoForSimpleClass(Field simpleField) {
+    private static FieldInfo getFieldInfoForSimpleClass(Field simpleField) {
         return new FieldInfo(simpleField, simpleField.getType(), getAnnotatedName(simpleField), null, null);
     }
 
-    private FieldInfo getFieldsInfoForEnum(Field enumField) {
+    private static FieldInfo getFieldsInfoForEnum(Field enumField) {
         Field[] enumValues = enumField.getType().getFields();
         ArrayList<String> fieldNames = new ArrayList<>();
         for (Field enumValue : enumValues) {
@@ -112,20 +139,31 @@ public class ClassHandler {
         return new FieldInfo(enumField, enumField.getType(), getAnnotatedName(enumField), fieldNames, null);
     }
 
-    private FieldInfo getFieldsInfoForEntity(Field classField, ArrayList<Entity> entities, Entity entityForEdit) {
+    public static void fillFieldInfoForEntities(ArrayList<Entity> entities, Entity entityForEdit) {
+        for (ArrayList<FieldInfo> fieldsInfo : fieldsInfoList) {
+            for (FieldInfo fieldInfo : fieldsInfo) {
+                if (Entity.class.isAssignableFrom(fieldInfo.getFieldType())) {
+                    updateFieldsInfoForEntity(fieldInfo, entities, entityForEdit);
+                }
+            }
+        }
+    }
+
+    private static void updateFieldsInfoForEntity(FieldInfo fieldInfo, ArrayList<Entity> entities, Entity entityForEdit) {
         ArrayList<String> fieldNames = new ArrayList<>();
         ArrayList<Object> fieldObjects = new ArrayList<>();
         fieldNames.add(NULL_NAME);
         for (Entity entity : entities) {
-            if (classField.getType().isAssignableFrom(entity.getClass()) && entity != entityForEdit) {
+            if (fieldInfo.getFieldType().isAssignableFrom(entity.getClass()) && entity != entityForEdit) {
                 fieldNames.add(entity.getEntityName() + " [" + entity.toString() + "]");
                 fieldObjects.add(entity);
             }
         }
-        return new FieldInfo(classField, classField.getType(), getAnnotatedName(classField), fieldNames, fieldObjects);
+        fieldInfo.setFieldValues(fieldNames);
+        fieldInfo.setFieldObjects(fieldObjects);
     }
 
-    private String getAnnotatedName(Field field) {
+    public static String getAnnotatedName(Field field) {
         EntityAnnotation annotation = field.getAnnotation(EntityAnnotation.class);
         if (annotation != null)
             return annotation.name();
@@ -133,7 +171,7 @@ public class ClassHandler {
             return field.getName();
     }
 
-    private String getAnnotatedName(Class givenClass) {
+    public static String getAnnotatedName(Class givenClass) {
         EntityAnnotation annotation = (EntityAnnotation) givenClass.getAnnotation(EntityAnnotation.class);
         if (annotation != null)
             return annotation.name();

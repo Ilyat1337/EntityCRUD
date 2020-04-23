@@ -1,6 +1,8 @@
 package sample.model.Entities;
 
-public abstract class Entity {
+import java.io.Serializable;
+
+public abstract class Entity implements Serializable {
 
     @EntityAnnotation(name = "ID")
     public int id;
@@ -12,6 +14,8 @@ public abstract class Entity {
     public String textureFile;
 
     private int aggregationsCount = 0;
+
+    private int hashCode = 0;
 
     public boolean isAggregated() {
         return aggregationsCount != 0;
@@ -25,9 +29,27 @@ public abstract class Entity {
         aggregationsCount--;
     }
 
+    public int getAggregationsCount() {
+        return aggregationsCount;
+    }
+
+    public void setAggregationsCount(int aggregationsCount) {
+        this.aggregationsCount = aggregationsCount;
+    }
+
+    public int getHashCode() {
+        return hashCode;
+    }
+
+    public void setHashCode(int hashCode) {
+        this.hashCode = hashCode;
+    }
+
     @Override
     public String toString() {
-        return String.valueOf(this.hashCode());
+        if (hashCode == 0)
+            hashCode = this.hashCode();
+        return String.valueOf(hashCode);
     }
 
     public String getEntityName() {
