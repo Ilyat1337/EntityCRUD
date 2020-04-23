@@ -27,46 +27,6 @@ public class ClassTableModel {
     public ClassTableModel() {
         entities = new ArrayList<>();
         serializationHandler = new SerializationHandler<>();
-
-//        ArrayList<Entity> entities = new ArrayList<>();
-//        EntityPlayer player = new EntityPlayer();
-//        player.username = "Ilyat"; player.health = 10;
-//        EntitySword sword = new EntitySword();
-//        sword.damage = 15;
-//        sword.materialType = EntityTool.ToolMaterialType.DIAMOND;
-//        player.tool = sword;
-//        entities.add(player);
-//        entities.add(sword);
-
-//        Serialization binarySerialization = serializationHandler.getSerializationByType(SerializationType.JSON_SERIALIZATION);
-//        try {
-//            binarySerialization.deserializeFromFile("test.json", entities);
-//        } catch (Exception ignored) {}
-
-        //GsonBuilder builder = new GsonBuilder();
-//        Gson gson = new GsonBuilder().setPrettyPrinting().create();// builder.create();
-//        //String str = gson.toJson(entities);
-//
-//        JsonElement element = gson.toJsonTree(entities);
-//        JsonArray array = element.getAsJsonArray();
-//        JsonObject obj = array.get(0).getAsJsonObject();
-//        obj.addProperty("tool", 0);
-//        for (JsonElement iter : array) {
-//
-//        }
-//        String str = gson.toJson(element);
-//        //EntitySword entityPlayer = new EntitySword();
-//        Type type = new TypeToken<ArrayList<Entity>>(){}.getType();
-//        ArrayList<Entity> entities_new = gson.fromJson(str, type);
-
-//        Serialization<Entity> binarySerialization = new BinarySerialization();
-//        try {
-//            binarySerialization.serializeToFile("test.binary", entities, null);
-//        } catch (Exception ignored) {}
-//        Serialization<Entity> binarySerialization = serializationHandler.getSerializationByType(SerializationType.BINARY_SERIALIZATION);
-//        try {
-//            binarySerialization.deserializeFromFile("test.dat", entities, null);
-//        } catch (Exception ignored) {}
     }
 
     public ArrayList<Entity> getEntities() {
