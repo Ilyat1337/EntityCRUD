@@ -7,23 +7,24 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class BinarySerialization implements Serialization {
-    private static final String FILE_EXT = "*.binary";
+    private static final String FILE_EXT = "binary";
     private static final String EXT_DESCRIPTION = "Binary serialization";
 
     @Override
-    public void serializeToFile(String fileName, ArrayList<Entity> objects) throws IOException {
-        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(fileName))) {
+    public byte[] serializeToBytes(ArrayList<Entity> objects) throws IOException {
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ObjectOutputStream outputStream = new ObjectOutputStream(byteArrayOutputStream)) {
             outputStream.writeInt(objects.size());
             for (Entity object : objects) {
                 outputStream.writeObject(object);
             }
+            return byteArrayOutputStream.toByteArray();
         }
-
     }
 
     @Override
-    public void deserializeFromFile(String fileName, ArrayList<Entity> objects) throws IOException, ClassNotFoundException {
-        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fileName))) {
+    public void deserializeFromBytes(byte[] data, ArrayList<Entity> objects) throws IOException, ClassNotFoundException {
+        try (ObjectInputStream inputStream = new ObjectInputStream(new ByteArrayInputStream(data))) {
             int size = inputStream.readInt();
             for (int i = 0; i < size; i++) {
                 objects.add((Entity)inputStream.readObject());

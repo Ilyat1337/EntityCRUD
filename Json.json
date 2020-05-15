@@ -1,0 +1,41 @@
+[
+  {
+    "timeUntilExplosion": 10,
+    "attackStrength": 20,
+    "attackTarget": 298112526,
+    "dropId": 9,
+    "health": 20,
+    "isAttacked": true,
+    "id": 234,
+    "speed": 10.0,
+    "textureFile": "creeper.png",
+    "aggregationsCount": 0,
+    "hashCode": 481294478,
+    "className": "EntityCreeper"
+  },
+  {
+    "username": "Ilyat",
+    "dimension": "END",
+    "tool": 1503255430,
+    "health": 20,
+    "isAttacked": true,
+    "id": 200,
+    "speed": 5.0,
+    "textureFile": "Ilyat.png",
+    "aggregationsCount": 1,
+    "hashCode": 298112526,
+    "className": "EntityPlayer"
+  },
+  {
+    "miningSpeed": 10,
+    "materialId": 330,
+    "durability": 250,
+    "materialType": "DIAMOND",
+    "id": 10,
+    "speed": 0.0,
+    "textureFile": "pickaxe.png",
+    "aggregationsCount": 1,
+    "hashCode": 1503255430,
+    "className": "EntityMiningTool"
+  }
+]

@@ -14,16 +14,19 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class TextSerialization implements Serialization {
-    private static final String FILE_EXT = "*.txt";
+    private static final String FILE_EXT = "txt";
     private static final String EXT_DESCRIPTION = "Custom text serialization";
 
     @Override
-    public void serializeToFile(String fileName, ArrayList<Entity> objects) throws IOException {
-        try (PrintWriter printWriter = new PrintWriter(new FileOutputStream(fileName))) {
+    public byte[] serializeToBytes(ArrayList<Entity> objects) throws IOException {
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(byteArrayOutputStream), true)) {
             HashSet<String> writtenHashes = new HashSet<>();
             for (Entity entity : objects) {
                 writeObjectData(entity, printWriter, writtenHashes);
             }
+            printWriter.flush();
+            return byteArrayOutputStream.toByteArray();
         } catch (Exception e) {
             throw new IOException();
         }
@@ -56,8 +59,8 @@ public class TextSerialization implements Serialization {
     }
 
     @Override
-    public void deserializeFromFile(String fileName, ArrayList<Entity> objects) throws IOException, ClassNotFoundException {
-        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName)))) {
+    public void deserializeFromBytes(byte[] data, ArrayList<Entity> objects) throws IOException, ClassNotFoundException {
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(data)))) {
             HashMap<String, Entity> storedEntities = new HashMap<>();
             String className;
             while ((className = bufferedReader.readLine()) != null) {

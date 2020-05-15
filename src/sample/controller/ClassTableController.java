@@ -61,6 +61,8 @@ public class ClassTableController {
         tvClasses.setItems(classInfoList);
         addContextMenu();
         initializeFileDialogs();
+
+        model.handleLoadFromFile("D:\\JavaProjects\\EntityCRUD\\test.txt", classInfoList);
     }
 
 
@@ -153,18 +155,23 @@ public class ClassTableController {
 
     private void initializeFileDialogs() {
         final FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().addAll(model.getExtensionFilters());
 
         btOpen.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent event) {
+                model.loadPlugins();
+                fileChooser.getExtensionFilters().clear();
+                fileChooser.getExtensionFilters().addAll(model.getExtensionFilters());
+
                 File file = fileChooser.showOpenDialog(stage);
                 if (file != null) {
-                    System.out.println(file.getName());
+                    //System.out.println(file.getName());
                     model.handleLoadFromFile(file.getAbsolutePath(), classInfoList);
                     fileChooser.setInitialDirectory(file.getParentFile());
                 }
+
+                model.unloadPlugins();
             }
         });
 
@@ -172,12 +179,18 @@ public class ClassTableController {
 
             @Override
             public void handle(ActionEvent event) {
+                model.loadPlugins();
+                fileChooser.getExtensionFilters().clear();
+                fileChooser.getExtensionFilters().addAll(model.getExtensionFilters());
+
                 File file = fileChooser.showSaveDialog(stage);
                 if (file != null) {
-                    System.out.println(file.getName());
+                    //System.out.println(file.getName());
                     model.handleSaveToFile(file.getAbsolutePath());
                     fileChooser.setInitialDirectory(file.getParentFile());
                 }
+
+                model.unloadPlugins();
             }
         });
     }

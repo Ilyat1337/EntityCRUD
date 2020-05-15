@@ -18,12 +18,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class JsonSerialization implements Serialization {
-    private static final String FILE_EXT = "*.json";
+    private static final String FILE_EXT = "json";
     private static final String EXT_DESCRIPTION = "JSON serialization";
     private static final String CLASS_NAME_PROPERTY = "className";
 
     @Override
-    public void serializeToFile(String fileName, ArrayList<Entity> objects) throws IOException {
+    public byte[] serializeToBytes(ArrayList<Entity> objects) throws IOException {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();// builder.create();
         JsonArray jsonArray = gson.toJsonTree(objects).getAsJsonArray();
         try {
@@ -46,16 +46,19 @@ public class JsonSerialization implements Serialization {
 
         String jsonString = gson.toJson(jsonArray);
 
-        try (PrintWriter printWriter = new PrintWriter(new FileOutputStream(fileName))) {
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(byteArrayOutputStream), true)) {
             printWriter.print(jsonString);
+            printWriter.flush();
+            return byteArrayOutputStream.toByteArray();
         } catch (Exception e) {
             throw new IOException();
         }
     }
 
     @Override
-    public void deserializeFromFile(String fileName, ArrayList<Entity> objects) throws IOException, ClassNotFoundException {
-        String content = Files.readString(Paths.get(fileName), StandardCharsets.US_ASCII);
+    public void deserializeFromBytes(byte[] data, ArrayList<Entity> objects) throws IOException, ClassNotFoundException {
+        String content = new String(data);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         JsonArray jsonArray = gson.fromJson(content, JsonArray.class);
 

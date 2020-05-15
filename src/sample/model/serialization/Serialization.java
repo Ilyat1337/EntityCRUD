@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public interface Serialization {
-    void serializeToFile(String fileName, ArrayList<Entity> objects) throws IOException;
-    void deserializeFromFile(String fileName, ArrayList<Entity> objects) throws IOException, ClassNotFoundException;
+    byte[] serializeToBytes(ArrayList<Entity> objects) throws IOException;
+    void deserializeFromBytes(byte[] data, ArrayList<Entity> objects) throws IOException, ClassNotFoundException;
     SerializationType getSerializationType();
     String getFileExt();
     default String getFileExtDescription() {

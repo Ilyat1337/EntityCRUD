@@ -2,6 +2,7 @@ package sample.model.serialization;
 
 import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
+import javafx.util.Pair;
 import sample.Main;
 
 import java.io.BufferedReader;
@@ -56,18 +57,18 @@ public class SerializationHandler<T> {
         return serializations.get(serializationType);
     }
 
-    public ArrayList<FileChooser.ExtensionFilter> getExtensionFilters() {
-        ArrayList<FileChooser.ExtensionFilter> extensionFilters = new ArrayList<>();
+    public ArrayList<Pair> getExtensionPairs() {
+        ArrayList<Pair> serializationExtensions = new ArrayList<>();
         for (Map.Entry<SerializationType, Serialization> entry: serializations.entrySet()) {
-            extensionFilters.add(new FileChooser.ExtensionFilter(entry.getValue().getFileExtDescription(),
-                                                    entry.getValue().getFileExt()));
+            serializationExtensions.add(new Pair<>(entry.getValue().getFileExt(),
+                    entry.getValue().getFileExtDescription()));
         }
-        return extensionFilters;
+        return serializationExtensions;
     }
 
-    public SerializationType getSerializationTypeByFileName(String fileName) {
+    public SerializationType getSerializationTypeByExt(String ext) {
         for (Map.Entry<SerializationType, Serialization> entry: serializations.entrySet()) {
-            if (fileName.endsWith(entry.getValue().getFileExt().substring(1)))
+            if (ext.equals(entry.getValue().getFileExt()))
                 return entry.getValue().getSerializationType();
         }
         return null;
